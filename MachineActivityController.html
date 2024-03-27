@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <style>
+        /* CSS styles go here */
+        /* Hide sub-classes and sub-sub-classes by default */
+        .sub-class,
+        .sub-sub-class {
+            display: none;
+            margin-left: 20px; /* Offset sub-classes and sub-sub-classes to the right */
+        }
+
+        .show-subclass-btn {
+            background-color: green;
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .show-subclass-btn.active {
+            background-color: darkgreen; /* Change to a darker version of green when clicked */
+        }
+
+        .sub-class-option-btn {
+            background-color: orange;
+            color: white;
+            font-size: 16px;
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 5px; /* Add margin between sub-class buttons */
+        }
+
+        .sub-class-option-btn.active {
+            background-color: darkorange; /* Change to a darker version of orange when clicked */
+        }
+
+        .sub-sub-class-option-btn {
+            background-color: red;
+            color: white;
+            font-size: 14px;
+            padding: 6px 12px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 3px; /* Add margin between sub-sub-class buttons */
+            margin-left: 25px; /* Offset sub-sub-class buttons to the right */
+        }
+
+        .sub-sub-class-option-btn.active {
+            background-color: darkred; /* Change to a darker version of red when clicked */
+        }
+      
+        #save-log-btn {
+            background-color: blue;
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+      
+    </style>
+</head>
+<body>
+  
+    <div class="main-class" id="bohrwagen">
+        <button class="show-subclass-btn">Bohrwagen</button>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Parked</button>
+        </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Driving</button>
+        </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Drilling</button>
+            <div class="sub-sub-class">
+                <button class="sub-sub-class-option-btn">Anker</button>
+                <button class="sub-sub-class-option-btn">Spiesse</button>
+                <button class="sub-sub-class-option-btn">Sprengloecher</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-class" id="radlader">
+        <button class="show-subclass-btn">Radlader</button>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Parked</button>
+        </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Driving</button>
+        </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Schuettern</button>
+        </div>
+    </div>
+
+    <div class="main-class" id="spritzmobil">
+        <button class="show-subclass-btn">Spritzmobil</button>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Parked</button>
+        </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Driving</button>
+        </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Spritzen</button>
+        </div>
+    </div>
+  
+  <button id="save-log-btn">Save Log</button>
+
+    <script>
+        // JavaScript code
+        document.addEventListener('DOMContentLoaded', function() {
+    const mainClassButtons = document.querySelectorAll('.show-subclass-btn');
+    const subClassButtons = document.querySelectorAll('.sub-class-option-btn');
+    const subSubClassButtons = document.querySelectorAll('.sub-sub-class-option-btn');
+    const saveLogButton = document.getElementById('save-log-btn');
+    const consoleLogs = []; // Array to store console log messages
+
+    function logButtonClick(buttonText, mainClass, subClass, subSubClass) {
+        const now = new Date();
+        const logMessage =`${now.toLocaleDateString()},${now.toLocaleTimeString()},${buttonText}`;
+
+        // Log to console
+        console.log(logMessage);
+
+        // Store log message
+        consoleLogs.push(logMessage);
+    }
+
+    mainClassButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Deselect all sub-classes and sub-sub-classes
+            subClassButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            subSubClassButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            logButtonClick(button.textContent);
+
+            // Remove 'active' class from all main class buttons
+            mainClassButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Add 'active' class to clicked main class button
+            this.classList.add('active');
+
+            // Hide all sub-classes
+            const subClasses = document.querySelectorAll('.sub-class');
+            subClasses.forEach(subClass => {
+                subClass.style.display = 'none';
+            });
+
+            // Show sub-classes corresponding to clicked main class button
+            const subClassContainer = this.parentNode;
+            subClassContainer.querySelectorAll('.sub-class').forEach(subClass => {
+                subClass.style.display = 'block';
+            });
+        });
+    });
+
+
+    subClassButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const mainClass = this.closest('.main-class').querySelector('.show-subclass-btn').textContent;
+            logButtonClick(`${mainClass},${button.textContent}`);
+
+            // Remove 'active' class from all sub-class buttons
+            subClassButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Add 'active' class to clicked sub-class button
+            this.classList.add('active');
+
+            // Hide all sub-sub-classes
+            const subSubClasses = document.querySelectorAll('.sub-sub-class');
+            subSubClasses.forEach(subSubClass => {
+                subSubClass.style.display = 'none';
+            });
+
+            // Show sub-sub-classes corresponding to clicked sub-class button
+            const subSubClassContainer = this.parentNode.querySelector('.sub-sub-class');
+            if (subSubClassContainer) {
+                subSubClassContainer.style.display = 'block';
+            }
+
+            // Deselect all sub-sub-class buttons
+            subSubClassButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+        });
+    });
+
+    subSubClassButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const mainClass = this.closest('.main-class').querySelector('.show-subclass-btn').textContent;
+            const subClass = this.closest('.sub-class').querySelector('.sub-class-option-btn').textContent;
+            logButtonClick(`${mainClass},${subClass},${button.textContent}`);
+
+            // Remove 'active' class from all sub-sub-class buttons
+            subSubClassButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Add 'active' class to clicked sub-sub-class button
+            this.classList.add('active');
+        });
+    });
+
+    // Event listener for saving console logs to CSV file
+    saveLogButton.addEventListener('click', function() {
+        if (consoleLogs.length === 0) {
+            console.log("No console logs to save.");
+            return;
+        }
+
+        // Add headers to the CSV data
+        let csvData = "";
+        
+        // Add each log message to the CSV data
+        consoleLogs.forEach(log => {
+            csvData += log + "\n";
+        });
+
+        // Create a Blob object with CSV data
+        const blob = new Blob([csvData], { type: 'text/csv' });
+
+        // Create a link element to trigger the download
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'MachineActivityLog.csv';
+
+        // Trigger the download
+        link.click();
+    });
+});
+
+    </script>
+</body>
+</html>
+
+
