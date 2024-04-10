@@ -105,6 +105,9 @@
             <button class="sub-class-option-btn">Driving</button>
         </div>
         <div class="sub-class">
+            <button class="sub-class-option-btn">Ruesten</button>
+        </div>
+        <div class="sub-class">
             <button class="sub-class-option-btn">Drilling</button>
             <div class="sub-sub-class">
                 <button class="sub-sub-class-option-btn">Anker</button>
@@ -112,7 +115,31 @@
                 <button class="sub-sub-class-option-btn">Sprengloecher</button>
             </div>
         </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Other</button>
+        </div>
     </div>
+
+    <div class="main-class" id="bagger">
+        <button class="show-subclass-btn">Bagger</button>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Parked</button>
+        </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Driving</button>
+        </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Lösen</button>
+            <div class="sub-sub-class">
+                <button class="sub-sub-class-option-btn">Mechanisch</button>
+                <button class="sub-sub-class-option-btn">Ablauten</button>
+            </div>
+        </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Other</button>
+        </div>
+    </div>
+
 
     <div class="main-class" id="radlader">
         <button class="show-subclass-btn">Radlader</button>
@@ -124,6 +151,16 @@
         </div>
         <div class="sub-class">
             <button class="sub-class-option-btn">Schuettern</button>
+        </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Support</button>
+            <div class="sub-sub-class">
+                <button class="sub-sub-class-option-btn">Gittern</button>
+                <button class="sub-sub-class-option-btn">Bogen</button>
+            </div>
+        </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Other</button>
         </div>
     </div>
 
@@ -138,139 +175,167 @@
         <div class="sub-class">
             <button class="sub-class-option-btn">Spritzen</button>
         </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Reinigung</button>
+            <div class="sub-sub-class">
+                <button class="sub-sub-class-option-btn">Stopfer</button>
+            </div>
+        </div>
+        <div class="sub-class">
+            <button class="sub-class-option-btn">Other</button>
+        </div>
     </div>
   
   <button id="save-log-btn">Save Log</button>
 
-    <script>
-        // JavaScript code
-        document.addEventListener('DOMContentLoaded', function() {
-    const mainClassButtons = document.querySelectorAll('.show-subclass-btn');
-    const subClassButtons = document.querySelectorAll('.sub-class-option-btn');
-    const subSubClassButtons = document.querySelectorAll('.sub-sub-class-option-btn');
-    const saveLogButton = document.getElementById('save-log-btn');
-    const consoleLogs = []; // Array to store console log messages
+  <script>
+    // JavaScript code
+document.addEventListener('DOMContentLoaded', function() {
+const mainClassButtons = document.querySelectorAll('.show-subclass-btn');
+const subClassButtons = document.querySelectorAll('.sub-class-option-btn');
+const subSubClassButtons = document.querySelectorAll('.sub-sub-class-option-btn');
+const saveLogButton = document.getElementById('save-log-btn');
+let firstLogTime; // Variable to store the timestamp of the first log entry
+const consoleLogs = []; // Array to store console log messages
 
-    function logButtonClick(buttonText, mainClass, subClass, subSubClass) {
-        const now = new Date();
-        const logMessage =`${now.toLocaleDateString()},${now.toLocaleTimeString()},${buttonText}`;
+function logButtonClick(buttonText, mainClass, subClass, subSubClass) {
+    const now = new Date();
+    const logMessage =`${now.toLocaleDateString(undefined, {timeZone: 'UTC'})},${now.toLocaleTimeString(undefined, {timeZone: 'UTC'})},${buttonText}`;
 
-        // Log to console
-        console.log(logMessage);
-
-        // Store log message
-        consoleLogs.push(logMessage);
+    if (!firstLogTime) {
+        firstLogTime = now; // Store the timestamp of the first log entry
     }
 
-    mainClassButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Deselect all sub-classes and sub-sub-classes
-            subClassButtons.forEach(btn => {
-                btn.classList.remove('active');
-            });
-            subSubClassButtons.forEach(btn => {
-                btn.classList.remove('active');
-            });
+    // Log to console
+    console.log(logMessage);
 
-            logButtonClick(button.textContent);
+    // Store log message
+    consoleLogs.push(logMessage);
+}
 
-            // Remove 'active' class from all main class buttons
-            mainClassButtons.forEach(btn => {
-                btn.classList.remove('active');
-            });
-            // Add 'active' class to clicked main class button
-            this.classList.add('active');
-
-            // Hide all sub-classes
-            const subClasses = document.querySelectorAll('.sub-class');
-            subClasses.forEach(subClass => {
-                subClass.style.display = 'none';
-            });
-
-            // Show sub-classes corresponding to clicked main class button
-            const subClassContainer = this.parentNode;
-            subClassContainer.querySelectorAll('.sub-class').forEach(subClass => {
-                subClass.style.display = 'block';
-            });
+// Add event listeners for main class buttons
+mainClassButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        // Deselect all sub-classes and sub-sub-classes
+        subClassButtons.forEach(btn => {
+            btn.classList.remove('active');
         });
-    });
-
-
-    subClassButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const mainClass = this.closest('.main-class').querySelector('.show-subclass-btn').textContent;
-            logButtonClick(`${mainClass},${button.textContent}`);
-
-            // Remove 'active' class from all sub-class buttons
-            subClassButtons.forEach(btn => {
-                btn.classList.remove('active');
-            });
-            // Add 'active' class to clicked sub-class button
-            this.classList.add('active');
-
-            // Hide all sub-sub-classes
-            const subSubClasses = document.querySelectorAll('.sub-sub-class');
-            subSubClasses.forEach(subSubClass => {
-                subSubClass.style.display = 'none';
-            });
-
-            // Show sub-sub-classes corresponding to clicked sub-class button
-            const subSubClassContainer = this.parentNode.querySelector('.sub-sub-class');
-            if (subSubClassContainer) {
-                subSubClassContainer.style.display = 'block';
-            }
-
-            // Deselect all sub-sub-class buttons
-            subSubClassButtons.forEach(btn => {
-                btn.classList.remove('active');
-            });
-        });
-    });
-
-    subSubClassButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const mainClass = this.closest('.main-class').querySelector('.show-subclass-btn').textContent;
-            const subClass = this.closest('.sub-class').querySelector('.sub-class-option-btn').textContent;
-            logButtonClick(`${mainClass},${subClass},${button.textContent}`);
-
-            // Remove 'active' class from all sub-sub-class buttons
-            subSubClassButtons.forEach(btn => {
-                btn.classList.remove('active');
-            });
-            // Add 'active' class to clicked sub-sub-class button
-            this.classList.add('active');
-        });
-    });
-
-    // Event listener for saving console logs to CSV file
-    saveLogButton.addEventListener('click', function() {
-        if (consoleLogs.length === 0) {
-            console.log("No console logs to save.");
-            return;
-        }
-
-        // Add headers to the CSV data
-        let csvData = "";
-        
-        // Add each log message to the CSV data
-        consoleLogs.forEach(log => {
-            csvData += log + "\n";
+        subSubClassButtons.forEach(btn => {
+            btn.classList.remove('active');
         });
 
-        // Create a Blob object with CSV data
-        const blob = new Blob([csvData], { type: 'text/csv' });
+        logButtonClick(button.textContent);
 
-        // Create a link element to trigger the download
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = 'MachineActivityLog.csv';
+        // Remove 'active' class from all main class buttons
+        mainClassButtons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+        // Add 'active' class to clicked main class button
+        this.classList.add('active');
 
-        // Trigger the download
-        link.click();
+        // Hide all sub-classes
+        const subClasses = document.querySelectorAll('.sub-class');
+        subClasses.forEach(subClass => {
+            subClass.style.display = 'none';
+        });
+
+        // Show sub-classes corresponding to clicked main class button
+        const subClassContainer = this.parentNode;
+        subClassContainer.querySelectorAll('.sub-class').forEach(subClass => {
+            subClass.style.display = 'block';
+        });
     });
 });
 
-    </script>
+// Add event listeners for sub class buttons
+subClassButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        const mainClass = this.closest('.main-class').querySelector('.show-subclass-btn').textContent;
+        logButtonClick(`${mainClass},${button.textContent}`);
+
+        // Remove 'active' class from all sub-class buttons
+        subClassButtons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+        // Add 'active' class to clicked sub-class button
+        this.classList.add('active');
+
+        // Hide all sub-sub-classes
+        const subSubClasses = document.querySelectorAll('.sub-sub-class');
+        subSubClasses.forEach(subSubClass => {
+            subSubClass.style.display = 'none';
+        });
+
+        // Show sub-sub-classes corresponding to clicked sub-class button
+        const subSubClassContainer = this.parentNode.querySelector('.sub-sub-class');
+        if (subSubClassContainer) {
+            subSubClassContainer.style.display = 'block';
+        }
+
+        // Deselect all sub-sub-class buttons
+        subSubClassButtons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+    });
+});
+
+// Add event listeners for sub-sub class buttons
+subSubClassButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        const mainClass = this.closest('.main-class').querySelector('.show-subclass-btn').textContent;
+        const subClass = this.closest('.sub-class').querySelector('.sub-class-option-btn').textContent;
+        logButtonClick(`${mainClass},${subClass},${button.textContent}`);
+
+        // Remove 'active' class from all sub-sub-class buttons
+        subSubClassButtons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+        // Add 'active' class to clicked sub-sub-class button
+        this.classList.add('active');
+    });
+});
+
+// Event listener for saving console logs to CSV file
+saveLogButton.addEventListener('click', function() {
+    if (consoleLogs.length === 0) {
+        console.log("No console logs to save.");
+        return;
+    }
+
+    // Format the first log timestamp
+    const formattedTimestamp = `${firstLogTime.getUTCFullYear()}${padZero(firstLogTime.getUTCMonth() + 1)}${padZero(firstLogTime.getUTCDate())}_${padZero(firstLogTime.getUTCHours())}${padZero(firstLogTime.getUTCMinutes())}${padZero(firstLogTime.getUTCSeconds())}`;
+
+    // Create filename using the formatted timestamp
+    const filename = `MachineActivityLog_${formattedTimestamp}.csv`;
+
+    // Add headers to the CSV data
+    let csvData = "";
+
+    // Add each log message to the CSV data
+    consoleLogs.forEach(log => {
+        csvData += log + "\n";
+    });
+
+    // Create a Blob object with CSV data
+    const blob = new Blob([csvData], { type: 'text/csv' });
+
+    // Create a link element to trigger the download
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = filename;
+
+    // Trigger the download
+    link.click();
+});
+
+// Function to pad single-digit numbers with a leading zero
+function padZero(num) {
+    return num < 10 ? '0' + num : num;
+}
+});
+
+
+</script>
 </body>
 </html>
 
